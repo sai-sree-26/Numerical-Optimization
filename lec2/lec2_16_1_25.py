@@ -96,7 +96,7 @@ print("L2 norm of relative error using new coefficinets:",np.linalg.norm(rel_err
 
 
 
-#############################################QR##########################################################
+#############################################  QR   ##########################################################
 
 #calculating inverse of X.T@X is the expensive step
 
@@ -157,7 +157,7 @@ np.savetxt("coefs_qr.csv",coefs_qr,delimiter=",")
 
 
 
-###############################SVD#############################################
+###############################   SVD   #############################################
 #instead of only 4 features we take all features
 X=df.drop(columns=['Price'])
 n_samples,n_features=X.shape
@@ -186,6 +186,21 @@ coefs_svd=Vt.T@b
 
 #calculate predictions using the new coefficients
 predictions_svd=X@coefs_svd
+
+
+####### Alternate notation ##########
+#X.T@X@coefs=X.T@y
+#coefs=(X.T@X)^-1@X.T@y
+#X_dagger=(X.T@X)^-1@X.T
+#find the inverse of X in least square sense
+#pseudo inverse of X is X_dagger= V@D^-1@U.T
+#so we can compute X_dagger using V, S_inv, U.T
+#X_dagger=Vt.T@S_inv@U.T
+#coefs_svd=X_dagger@y
+#predictions_svd=X@coefs_svd
+############### End of alternate notation  ############
+
+
 
 #calculate the errors and relative errors
 errors_svd=y-predictions_svd

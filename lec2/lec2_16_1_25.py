@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #use pandas to load the real estate dataset
 df=pd.read_csv("real_estate_dataset.csv")
@@ -211,6 +212,76 @@ print("L2 norm of relative error using SVD:", np.linalg.norm(rel_error_svd))
 
 #saving the coefs
 np.savetxt("coefs_svd.csv", coefs_svd, delimiter=",")
+
+
+
+# X_1=X[:,0:1]
+
+# ######### which feature is affecting the most??????
+
+
+# ### Use X as only square feet to build a linear model to predict price
+# X=df["Square_feet"].values
+# y=df["Price"].values
+# X=np.hstack(np.ones(n_samples,1),X.reshape(-1,1))
+# coefs_1=np.linalg.inv(X_1.T@X_1)@X_1.T@y
+
+# predictions_1=X@coefs_1
+
+
+# #plot the data on X[:,1] vs y axis
+# #first make X[:,1] as np.arange between min and max of X[:,1]
+# X_feature=np.arange(np.min(X[:,1]),np.max(X[:,1]),0.01)
+# plt.scatter(X[:,1],y)
+# plt.plot(X_feature,X_feature*coefs_svd[1],color="red")
+# #plt.plot(X[:,1],X[:,1:3]@coefs_svd[1:3],color='red')
+# plt.xlabel("Square feet")
+# plt.ylabel("Price")
+# plt.title("Price vs square feet")
+# plt.show()
+# plt.savefig("Price_vs_square_feet.png")
+
+
+
+# plot the data data (X[:,1],y)
+# first make X[:,1] as np.arange between min and max of X[:,1]
+# then calculate the predictoins using the coefficients
+X_features = np.arange(np.min(X[:,1]), np.max(X[:,1]), 0.01)
+
+plt.scatter(X[:,1], y)
+plt.plot(X_features,X_features * coefs_svd[1], color='red') #regression line
+plt.xlabel('Square Feet')
+plt.ylabel('Price')
+plt.title('Price vs Square Feet')
+plt.show()
+plt.savefig('Price_vs_Square_Feet.png')
+
+
+
+
+
+
+# use x as only saquare feet to build the model
+
+X = df[['Square_Feet']].values
+y = df['Price'].values
+X= np.hstack([np.ones((n_samples, 1)), X])
+ 
+coeff_1 = np.linalg.inv(X.T @ X) @ X.T @ y
+predictions_1 = X @ coeff_1
+X_feature = np.arange(np.min(X[:,1]), np.max(X[:,1]), 10)
+print("min of X[:,1]", np.min(X[:,1]))
+print("max of X[:,1]", np.max(X[:,1]))
+# pad the X_feature with ones
+X_feature = np.hstack([np.ones((X_feature.shape[0], 1)), X_feature.reshape(-1, 1)])
+plt.scatter(X[:,1], y, label='Data')
+plt.plot(X_feature[:,1], X_feature  @ coeff_1, label='Regression Line', c='Red')
+plt.xlabel('Square Feet')
+plt.ylabel('Price')
+plt.title('Price vs Square Feet')
+plt.legend()
+plt.show()
+plt.savefig('Price_vs_Square_Feet.png')
 
 
 
